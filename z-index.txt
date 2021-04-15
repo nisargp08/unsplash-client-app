@@ -1,0 +1,9 @@
+// For reference only - This file is not linked to any component of this project
+$zindex-dropdown:                   1000;
+$zindex-sticky:                     1020;
+$zindex-fixed:                      1030;
+$zindex-offcanvas:                  1040;
+$zindex-modal-backdrop:             1050;
+$zindex-modal:                      1060;
+$zindex-popover:                    1070;
+$zindex-tooltip:                    1080;
