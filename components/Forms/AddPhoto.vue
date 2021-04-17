@@ -21,17 +21,19 @@
             </button>
           </div>
           <!-- Form Fields-->
-          <div class="my-6 space-y-5">
+          <div class="mt-6 space-y-5">
             <div class="space-y-2">
               <label class="block w-full font-medium text-sm" for="photoLabel"
                 >Label</label
               >
               <input
                 id="photoLabel"
+                v-model="inputFile.label"
                 class="block w-full text-sm border border-gray-300 rounded-lg py-2 px-4 shadow-sm transition focus:outline-none focus:border-gray-500"
                 type="text"
                 name="photoLabel"
                 placeholder="Photo Label"
+                required
               />
             </div>
             <div class="space-y-2">
@@ -40,19 +42,32 @@
               >
               <input
                 id="photoUrl"
+                v-model="inputFile.url"
                 class="block w-full text-sm border border-gray-300 rounded-lg py-2 px-4 shadow-sm transition focus:outline-none focus:border-gray-500"
                 type="text"
                 name="photoUrl"
                 placeholder="https://www.example.com"
+                required
               />
             </div>
+          </div>
+          <!-- Error panel -->
+          <div class="mt-4 text-sm text-red-500 font-medium">
+            <ul>
+              <li v-for="(error, index) in errMessages" :key="index">
+                {{ error }}
+              </li>
+            </ul>
           </div>
           <!-- Form Submission -->
           <div class="flex items-center space-x-2 justify-end">
             <elements-button class="text-sm" @buttonClick="closeModal"
               >Cancel</elements-button
             >
-            <elements-button class="text-sm" color="green"
+            <elements-button
+              class="text-sm"
+              color="green"
+              @buttonClick="uploadPhoto"
               >Submit</elements-button
             >
           </div>
@@ -63,7 +78,18 @@
 </template>
 
 <script>
+// import axios from 'axios'
+
 export default {
+  data() {
+    return {
+      inputFile: {
+        label: '',
+        url: '',
+      },
+      errMessages: [],
+    }
+  },
   mounted() {
     // Close modal on escape key
     window.addEventListener('keyup', (e) => {
@@ -75,6 +101,24 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeModal')
+    },
+    async uploadPhoto() {
+      // Clear error array buffer
+      this.clearErrors()
+      try {
+        // Send the label and link to the api in plugins
+        const response = await this.$photoApi.insertPhotoFromUrl(this.inputFile)
+        // If successfull close the modal
+        if (response) {
+          this.closeModal()
+        }
+      } catch (error) {
+        // Push error message to array
+        this.errMessages.push(error)
+      }
+    },
+    clearErrors() {
+      this.errMessages = []
     },
   },
 }
