@@ -14,7 +14,7 @@
       <div class="relative max-w-screen-sm w-full">
         <div class="relative bg-white rounded-xl shadow-xl py-6 px-8 mx-4">
           <!-- Default state -->
-          <form action="#" @submit.prevent="uploadPhoto">
+          <form action="#" method="post" @submit.prevent="uploadPhoto">
             <!-- Form Heading -->
             <div class="flex items-center justify-between">
               <h3 class="text-2xl font-medium">Add a new photo</h3>

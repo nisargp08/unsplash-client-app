@@ -2,10 +2,12 @@
 import axios from 'axios'
 export default function (context, inject) {
   // Variables
-  const apiServerUrl = 'http://localhost:5000/api/fileUpload'
+  const apiServerUrl = 'http://localhost:5555/api/fileUpload'
   // Inject the function you want to use in nuxt components
   inject('photoApi', {
+    apiServerUrl,
     insertPhotoFromUrl,
+    getAllPhotos,
   })
 
   // Functions
@@ -38,6 +40,15 @@ export default function (context, inject) {
     }
   }
 
+  async function getAllPhotos() {
+    try {
+      // Get all file id's from the api server
+      const fileIds = await axios.get(apiServerUrl)
+      return fileIds
+    } catch (error) {
+      getErrorMessage(error)
+    }
+  }
   // Function to return error message when caught
   function getErrorMessage(error) {
     throw new Error(error.message)
