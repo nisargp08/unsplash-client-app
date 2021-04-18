@@ -1,5 +1,7 @@
 <template>
-  <div class="navbar-container px-4 py-6 text-sm">
+  <div
+    class="navbar-container px-4 py-6 text-sm sticky top-0 bg-gray-900 shadow-2xl"
+  >
     <div
       class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between"
     >
@@ -19,12 +21,14 @@
           </div>
           <div class="text-gray-200 flex-1 pl-2 sm:pl-4">
             <input
+              v-model="searchString"
               type="search"
               name="imageSearch"
               placeholder="Search by name"
               class="w-full bg-transparent focus:outline-none"
               @focus="toggleFocus"
               @blur="toggleFocus"
+              @keypress.enter="searchFiles"
             />
           </div>
         </div>
@@ -52,6 +56,7 @@ export default {
     return {
       searchIsFocused: false,
       modalIsOpen: false,
+      searchString: '',
     }
   },
   methods: {
@@ -60,6 +65,10 @@ export default {
     },
     toggleModal() {
       this.modalIsOpen = !this.modalIsOpen
+    },
+    // Dispatch action to find the file matching the searchstring
+    searchFiles() {
+      this.$store.dispatch('getFilteredFiles', this.searchString)
     },
   },
 }

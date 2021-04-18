@@ -11,6 +11,7 @@
 <style>
 :root {
   --zindex-modal: 1060;
+  --animate-duration: 250ms;
 }
 
 html {

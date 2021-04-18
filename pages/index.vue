@@ -9,16 +9,35 @@
       </no-image-state>
     </template>
     <!--When no photos are present  -->
-    <template v-else-if="!files">
-      <no-image-state></no-image-state>
+    <template v-else-if="!filteredFiles">
+      <no-image-state :show-photo-button="true">
+        <h1 class="text-base sm:text-xl sm:leading-10 font-medium">
+          Looks like no photos are available for display!
+        </h1>
+        <h3 class="text-sm sm:text-base font-medium text-gray-400 mt-2 sm:mt-0">
+          Upload your first photo!
+        </h3>
+      </no-image-state>
     </template>
     <!-- When photos are present -->
     <template v-else>
-      <div class="grid grid-cols-4">
-        <div v-for="(file, index) in files" :key="index">
-          <img :src="getFileUrl(file.id)" :alt="file.label" />
-        </div>
-      </div>
+      <transition-fade>
+        <template v-if="filteredFiles.length > 0">
+          <div class="grid grid-cols-4">
+            <div v-for="(file, index) in filteredFiles" :key="index">
+              <img :src="getFileUrl(file.id)" :alt="file.label" />
+              <p>{{ file.label }}</p>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <no-image-state>
+            <h1 class="text-base sm:text-xl sm:leading-10 font-medium">
+              No photos founds for your match!
+            </h1>
+          </no-image-state>
+        </template>
+      </transition-fade>
     </template>
   </div>
 </template>
@@ -40,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['files']),
+    ...mapState(['filteredFiles']),
   },
   methods: {
     getFileUrl(id) {

@@ -1,6 +1,7 @@
 // State
 export const state = () => ({
   files: [],
+  filteredFiles: [],
 })
 
 // Mutations
@@ -8,6 +9,9 @@ export const mutations = {
   // Set passed files as state files
   setFiles(state, files) {
     state.files = files
+  },
+  setFilteredFiles(state, filteredFiles) {
+    state.filteredFiles = filteredFiles
   },
 }
 
@@ -19,5 +23,20 @@ export const actions = {
     const { data } = await this.$photoApi.getAllPhotos()
     // Commit mutation
     commit('setFiles', data)
+    commit('setFilteredFiles', data)
+  },
+  // Action to get filtered files based on user searchFiles
+  getFilteredFiles({ state, commit }, search) {
+    if (search && search.trim().length !== 0) {
+      const files = state.files.filter((file) => {
+        return search
+          .toLowerCase()
+          .split(' ')
+          .every((char) => file.label.toLowerCase().includes(char))
+      })
+      commit('setFilteredFiles', files)
+    } else {
+      commit('setFilteredFiles', state.files)
+    }
   },
 }

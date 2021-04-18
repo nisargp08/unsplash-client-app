@@ -10,13 +10,8 @@
         <slot></slot>
       </template>
       <template v-else>
-        <h1 class="text-base sm:text-xl sm:leading-10 font-medium">
-          Looks like no photos are available for display!
-        </h1>
-        <h3 class="text-sm sm:text-base font-medium text-gray-400 mt-2 sm:mt-0">
-          Upload your first photo!
-        </h3>
-        <div class="mt-4">
+        <slot></slot>
+        <div v-if="showPhotoButton" class="mt-4">
           <elements-button color="green" @buttonClick="toggleModal"
             >Add a photo</elements-button
           >
@@ -37,6 +32,10 @@
 export default {
   props: {
     isErrorState: {
+      type: Boolean,
+      default: false,
+    },
+    showPhotoButton: {
       type: Boolean,
       default: false,
     },
