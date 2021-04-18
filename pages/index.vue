@@ -24,19 +24,23 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  async asyncData({ $photoApi }) {
-    let errorMessage, files
+  async asyncData({ store }) {
+    let errorMessage
     try {
-      const { data } = await $photoApi.getAllPhotos()
-      files = data
+      // Dispatch an action to get all photos from store
+      await store.dispatch('getAllPhotos')
     } catch (error) {
       errorMessage = 'Error getting photos. Please try again later...'
     }
     return {
-      files,
       errorMessage,
     }
+  },
+  computed: {
+    ...mapState(['files']),
   },
   methods: {
     getFileUrl(id) {
