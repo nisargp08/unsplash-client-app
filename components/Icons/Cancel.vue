@@ -31,6 +31,11 @@ export default {
     iconSize() {
       // Return icon size equal to passed props
       return [`h-${this.height}`, `w-${this.width}`]
+      // h-4 w-4
+      // h-5 w-5
+      // h-6 w-6
+      // h-7 w-7
+      // h-8 w-8
     },
   },
 }

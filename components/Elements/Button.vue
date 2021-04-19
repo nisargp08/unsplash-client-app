@@ -38,6 +38,9 @@ export default {
         `hover:bg-${this.color}-800`,
         `focus:ring-${this.color}-500`,
       ]
+      // bg-green-700 border-green-600 hover:bg-green-800 focus:ring-green-500
+      // bg-gray-700 border-gray-600 hover:bg-gray-800 focus:ring-gray-500
+      // bg-red-700 border-red-600 hover:bg-red-800 focus:ring-red-500
     },
     // Following classes will be applied when the button is disabled
     disabledClasess() {
