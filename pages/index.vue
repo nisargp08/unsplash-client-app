@@ -9,7 +9,7 @@
       </no-image-state>
     </template>
     <!--When no photos are present  -->
-    <template v-else-if="!filteredFiles">
+    <template v-else-if="files.length === 0">
       <no-image-state :show-photo-button="true">
         <h1 class="text-base sm:text-xl sm:leading-10 font-medium">
           Looks like no photos are available for display!
@@ -86,15 +86,22 @@ export default {
     }
   },
   computed: {
-    ...mapState(['filteredFiles']),
+    ...mapState(['files', 'filteredFiles']),
   },
   methods: {
     getFileUrl(id) {
       return `${this.$photoApi.apiServerUrl}/${id}`
     },
-    deletePhoto(id) {
-      console.log(id)
-      alert('Are you sure ?')
+    async deletePhoto(id) {
+      if (confirm('Are you sure ?')) {
+        try {
+          await this.$photoApi.deletePhotoById(id)
+          // Update photo list
+          await this.$store.dispatch('getAllPhotos')
+        } catch (error) {
+          this.errorMessage = 'Error deleting photo. Please try again later...'
+        }
+      }
     },
   },
 }

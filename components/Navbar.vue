@@ -1,6 +1,6 @@
 <template>
   <div
-    class="navbar-container px-4 py-6 text-sm sticky top-0 bg-gray-900 shadow-2xl"
+    class="navbar-container px-4 py-6 text-sm sticky top-0 bg-gray-900 shadow-xl"
   >
     <div
       class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between"

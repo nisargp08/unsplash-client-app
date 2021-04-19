@@ -8,6 +8,7 @@ export default function (context, inject) {
     apiServerUrl,
     insertPhotoFromUrl,
     getAllPhotos,
+    deletePhotoById,
   })
 
   // Functions
@@ -45,6 +46,15 @@ export default function (context, inject) {
       // Get all file id's from the api server
       const fileIds = await axios.get(apiServerUrl)
       return fileIds
+    } catch (error) {
+      getErrorMessage(error)
+    }
+  }
+
+  async function deletePhotoById(id) {
+    try {
+      const response = await axios.delete(`${apiServerUrl}/${id}`)
+      return response
     } catch (error) {
       getErrorMessage(error)
     }

@@ -114,13 +114,18 @@ export default {
       try {
         // Send the label and link to the api in plugins
         const response = await this.$photoApi.insertPhotoFromUrl(this.inputFile)
-        // If successfull close the modal
+        // If successfull
         if (response) {
+          // Update photo list
+          await this.$store.dispatch('getAllPhotos')
+          // close the modal
           this.closeModal()
         }
       } catch (error) {
         // Push error message to array
-        this.errMessages.push(error)
+        this.errMessages.push(
+          'Invalid file link. Please try a different link...'
+        )
       } finally {
         // Stop loading state
         this.apiIsLoading = false
