@@ -41,12 +41,14 @@
       </div>
     </div>
     <!-- Add a photo modal -->
-    <template v-if="modalIsOpen"
-      ><forms-add-photo
-        class="text-gray-900"
-        @closeModal="toggleModal"
-      ></forms-add-photo
-    ></template>
+    <transition-fade>
+      <template v-if="modalIsOpen"
+        ><forms-add-photo
+          class="text-gray-900"
+          @closeModal="toggleModal"
+        ></forms-add-photo
+      ></template>
+    </transition-fade>
   </div>
 </template>
 
@@ -73,3 +75,9 @@ export default {
   },
 }
 </script>
+
+<style lang="css" scoped>
+.navbar-container {
+  z-index: var(--zindex-sticky);
+}
+</style>

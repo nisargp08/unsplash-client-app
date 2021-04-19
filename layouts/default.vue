@@ -10,6 +10,7 @@
 
 <style>
 :root {
+  --zindex-sticky: 1020;
   --zindex-modal: 1060;
   --animate-duration: 250ms;
 }

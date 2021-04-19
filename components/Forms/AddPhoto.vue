@@ -14,7 +14,7 @@
       <div class="relative max-w-screen-sm w-full">
         <div class="relative bg-white rounded-xl shadow-xl py-6 px-8 mx-4">
           <!-- Default state -->
-          <form action="#" method="post" @submit.prevent="uploadPhoto">
+          <div class="form-wrapper">
             <!-- Form Heading -->
             <div class="flex items-center justify-between">
               <h3 class="text-2xl font-medium">Add a new photo</h3>
@@ -66,11 +66,16 @@
               <elements-button class="text-sm" @buttonClick="closeModal"
                 >Cancel</elements-button
               >
-              <elements-button type="submit" class="text-sm" color="green"
+              <elements-button
+                type="submit"
+                class="text-sm"
+                color="green"
+                :disabled="disableCheck"
+                @buttonClick="uploadPhoto"
                 >Submit</elements-button
               >
             </div>
-          </form>
+          </div>
           <!-- Loading state -->
           <template v-if="apiIsLoading">
             <icons-loading-spinner
@@ -96,6 +101,21 @@ export default {
       apiIsLoading: false,
     }
   },
+  computed: {
+    // Disabled button when no input
+    disableCheck() {
+      if (
+        this.inputFile.label.trim().length === 0 ||
+        this.inputFile.url.trim().length === 0
+      ) {
+        // One of the form field is empty, so disabled the button
+        return true
+      } else {
+        // Both form fields have value, so enable the button
+        return false
+      }
+    },
+  },
   mounted() {
     // Close modal on escape key
     window.addEventListener('keyup', (e) => {
@@ -109,6 +129,11 @@ export default {
       this.$emit('closeModal')
     },
     async uploadPhoto() {
+      // Check if form fields have values
+      if (this.disableCheck) {
+        this.errMessages.push('Label/URL is required')
+        return
+      }
       // Start api loading
       this.apiIsLoading = true
       // Clear error array buffer

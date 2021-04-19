@@ -1,7 +1,8 @@
 <template>
   <button
     class="border text-white rounded-md px-4 py-2 font-medium transition focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-2"
-    :class="buttonColorClass"
+    :class="[buttonColorClass, { 'opacity-50 cursor-not-allowed ': disabled }]"
+    :disabled="disabled"
     @click="buttonClicked"
   >
     <slot></slot>
@@ -14,6 +15,10 @@ export default {
     color: {
       type: String,
       default: 'gray',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
