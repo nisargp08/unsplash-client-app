@@ -23,10 +23,37 @@
     <template v-else>
       <transition-fade>
         <template v-if="filteredFiles.length > 0">
-          <div class="grid grid-cols-4">
-            <div v-for="(file, index) in filteredFiles" :key="index">
-              <img :src="getFileUrl(file.id)" :alt="file.label" />
-              <p>{{ file.label }}</p>
+          <div class="max-w-screen-2xl mx-auto w-full my-12">
+            <div class="masonary mx-4">
+              <div
+                v-for="(file, index) in filteredFiles"
+                :key="index"
+                class="mb-4 relative grid-item"
+              >
+                <div class="grid-images">
+                  <img :src="getFileUrl(file.id)" :alt="file.label" />
+                </div>
+                <div
+                  class="image-overlay absolute inset-0 hidden flex-col p-4 justify-between bg-gray-900 bg-opacity-50"
+                >
+                  <!-- Delete Button -->
+                  <div class="self-end">
+                    <elements-button
+                      class="flex items-center px-3 py-1"
+                      color="red"
+                      title="Delete this photo"
+                      size="sm"
+                      @buttonClick="deletePhoto(file.id)"
+                    >
+                      <icons-trash :height="4" :width="4"></icons-trash>
+                      <span class="ml-1">Delete</span>
+                    </elements-button>
+                  </div>
+                  <p class="text-xs sm:text-base font-medium">
+                    {{ file.label }}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </template>
@@ -65,6 +92,39 @@ export default {
     getFileUrl(id) {
       return `${this.$photoApi.apiServerUrl}/${id}`
     },
+    deletePhoto(id) {
+      console.log(id)
+      alert('Are you sure ?')
+    },
   },
 }
 </script>
+
+<style>
+.grid-item:hover .image-overlay {
+  display: flex;
+}
+.masonary {
+  columns: 2;
+  column-gap: 1rem;
+}
+.masonary .grid-images {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+.masonary .grid-images img {
+  width: 100%;
+  border-radius: 0.375rem;
+}
+@media (min-width: 768px) {
+  .masonary {
+    columns: 3;
+  }
+}
+@media (min-width: 1024px) {
+  .masonary {
+    columns: 4;
+  }
+}
+</style>

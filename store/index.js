@@ -21,9 +21,11 @@ export const actions = {
   async getAllPhotos({ commit }) {
     // Fetch all files : { data } = response.data
     const { data } = await this.$photoApi.getAllPhotos()
+    // Reversing the array so returns latest image is on top
+    const latestData = data.reverse()
     // Commit mutation
-    commit('setFiles', data)
-    commit('setFilteredFiles', data)
+    commit('setFiles', latestData)
+    commit('setFilteredFiles', latestData)
   },
   // Action to get filtered files based on user searchFiles
   getFilteredFiles({ state, commit }, search) {

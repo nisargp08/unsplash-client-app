@@ -1,7 +1,7 @@
 <template>
   <button
-    class="border text-white rounded-md px-4 py-2 font-medium transition focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-2"
-    :class="[buttonColorClass, { 'opacity-50 cursor-not-allowed ': disabled }]"
+    class="border text-white rounded-md font-medium transition focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-2"
+    :class="[colorClasses(), disabledClasess(), sizeClasses()]"
     :disabled="disabled"
     @click="buttonClicked"
   >
@@ -20,10 +20,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    size: {
+      type: String,
+      default: 'md',
+    },
   },
-  computed: {
+  methods: {
+    // This function is used to emit the click back to the parent
+    buttonClicked() {
+      this.$emit('buttonClick')
+    },
     // This function will return the classes based on the color passed as a prop
-    buttonColorClass() {
+    colorClasses() {
       return [
         `bg-${this.color}-700`,
         `border-${this.color}-600`,
@@ -31,11 +39,23 @@ export default {
         `focus:ring-${this.color}-500`,
       ]
     },
-  },
-  methods: {
-    // This function is used to emit the click back to the parent
-    buttonClicked() {
-      this.$emit('buttonClick')
+    // Following classes will be applied when the button is disabled
+    disabledClasess() {
+      if (this.disabled) {
+        return ['opacity-50 cursor-not-allowed']
+      }
+    },
+    // THis function will return the classes based on the size passed as a prop
+    sizeClasses() {
+      if (this.size === 'sm') {
+        return 'text-xs px-2 py-1'
+      } else if (this.size === 'md') {
+        return 'text-sm px-4 py-2'
+      } else if (this.size === 'lg') {
+        return 'text-base px-5 py-3'
+      } else if (this.size === 'custom') {
+        return ''
+      }
     },
   },
 }

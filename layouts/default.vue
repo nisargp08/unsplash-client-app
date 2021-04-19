@@ -10,9 +10,11 @@
 
 <style>
 :root {
+  /* Z-index */
   --zindex-sticky: 1020;
   --zindex-modal: 1060;
-  --animate-duration: 250ms;
+  /* Animation duration */
+  --animate-duration: 150ms;
 }
 
 html {
