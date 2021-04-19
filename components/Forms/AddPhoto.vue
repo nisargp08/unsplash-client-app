@@ -2,8 +2,19 @@
   <elements-modal @closeModal="closeModal">
     <!-- Default state -->
     <div class="form-wrapper">
+      <!-- Sleeping notice -->
+      <div
+        class="py-2 px-4 text-sm font-medium bg-green-200 text-green-700 rounded-md"
+      >
+        <p>
+          First photo upload might take 15-30 seconds as heroku servers go to
+          sleep when idle.😴
+        </p>
+      </div>
       <!-- Form Heading -->
-      <div class="flex items-center justify-between">
+      <div
+        class="flex items-center justify-between mt-4 border-t border-gray-200 pt-4"
+      >
         <h3 class="text-2xl font-medium">Add a new photo</h3>
         <button class="text-gray-500" @click="closeModal">
           <icons-cancel :height="5" :width="5"></icons-cancel>
