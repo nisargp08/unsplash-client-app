@@ -2,7 +2,7 @@
 import axios from 'axios'
 export default function (context, inject) {
   // Variables
-  const apiServerUrl = 'http://localhost:5555/api/fileUpload'
+  const apiServerUrl = `${process.env.API_SERVER_URL}/fileUpload`
   // Inject the function you want to use in nuxt components
   inject('photoApi', {
     apiServerUrl,

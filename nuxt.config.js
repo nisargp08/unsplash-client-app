@@ -46,7 +46,7 @@ export default {
   build: {},
 
   // Environment Variables
-  publicRuntimeConfig: {
-    baseURL: process.env.API_SERVER_URL,
+  env: {
+    API_SERVER_URL: process.env.API_SERVER_URL,
   },
 }
