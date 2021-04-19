@@ -8,7 +8,7 @@
 
 <div align="center">
   <h3>
-    <a href="https://np-unsplash.netlify.app/">
+    <a href="https://np-unsplash.vercel.app/">
       Demo
     </a>
   </h3>
