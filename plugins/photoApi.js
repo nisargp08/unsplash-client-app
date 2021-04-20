@@ -1,6 +1,5 @@
 // Imports
-import axios from 'axios'
-export default function (context, inject) {
+export default function ({ $axios }, inject) {
   // Variables
   const apiServerUrl = `${process.env.API_SERVER_URL}/fileUpload`
   // Inject the function you want to use in nuxt components
@@ -15,10 +14,9 @@ export default function (context, inject) {
   async function insertPhotoFromUrl(input) {
     try {
       // Fetch the blob file from the url
-      const response = await axios.get(input.url, {
+      const blobFile = await $axios.$get(input.url, {
         responseType: 'blob',
       })
-      const blobFile = response.data
       // If received response is a blob
       if (blobFile.type.match('image/*')) {
         // Create a file from the received blob
@@ -30,7 +28,7 @@ export default function (context, inject) {
         formData.append('label', input.label)
         // Call the api server to insert a file
         try {
-          const fileUpload = await axios.post(apiServerUrl, formData)
+          const fileUpload = await $axios.post(apiServerUrl, formData)
           return fileUpload
         } catch (error) {
           getErrorMessage(error)
@@ -44,7 +42,7 @@ export default function (context, inject) {
   async function getAllPhotos() {
     try {
       // Get all file id's from the api server
-      const fileIds = await axios.get(apiServerUrl)
+      const fileIds = await $axios.get(apiServerUrl)
       return fileIds
     } catch (error) {
       getErrorMessage(error)
@@ -53,7 +51,7 @@ export default function (context, inject) {
 
   async function deletePhotoById(id) {
     try {
-      const response = await axios.delete(`${apiServerUrl}/${id}`)
+      const response = await $axios.delete(`${apiServerUrl}/${id}`)
       return response
     } catch (error) {
       getErrorMessage(error)
