@@ -8,6 +8,10 @@
         </p>
       </no-image-state>
     </template>
+    <!-- Show loading state when getting image data -->
+    <template v-else-if="isLoading">
+      <icons-loading-spinner :height="8" :width="8"></icons-loading-spinner>
+    </template>
     <!--When no photos are present  -->
     <template v-else-if="files.length === 0">
       <no-image-state :show-photo-button="true">
@@ -73,20 +77,26 @@
 import { mapState } from 'vuex'
 
 export default {
-  async asyncData({ store }) {
-    let errorMessage
-    try {
-      // Dispatch an action to get all photos from store
-      await store.dispatch('getAllPhotos')
-    } catch (error) {
-      errorMessage = 'Error getting photos. Please try again later...'
-    }
+  data() {
     return {
-      errorMessage,
+      errorMessage: '',
+      isLoading: false,
     }
   },
   computed: {
     ...mapState(['files', 'filteredFiles']),
+  },
+  async created() {
+    // Start loading
+    this.isLoading = true
+    try {
+      // Dispatch an action to get all photos from store
+      await this.$store.dispatch('getAllPhotos')
+    } catch (error) {
+      this.errorMessage = 'Error getting photos. Please try again later...'
+    }
+    // Stop loading
+    this.isLoading = false
   },
   methods: {
     getFileUrl(id) {
