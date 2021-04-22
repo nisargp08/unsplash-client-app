@@ -11,10 +11,8 @@
         @click="closeModal"
       ></div>
       <!-- Modal content -->
-      <div class="relative max-w-screen-sm w-full">
-        <div class="relative bg-white rounded-xl shadow-xl py-6 px-8 mx-4">
-          <slot></slot>
-        </div>
+      <div class="relative w-full overflow-y-auto" :class="getModalSize()">
+        <slot></slot>
       </div>
     </div>
   </div>
@@ -22,6 +20,12 @@
 
 <script>
 export default {
+  props: {
+    size: {
+      type: String,
+      default: '',
+    },
+  },
   mounted() {
     // Close modal on escape key
     window.addEventListener('keyup', (e) => {
@@ -33,6 +37,20 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeModal')
+    },
+    getModalSize() {
+      switch (this.size) {
+        case 'sm':
+          return 'max-w-screen-sm'
+        case 'md':
+          return 'max-w-screen-md'
+        case 'lg':
+          return 'max-w-screen-lg'
+        case 'xl':
+          return 'max-w-screen-xl'
+        case '2xl':
+          return 'max-w-screen-2xl'
+      }
     },
   },
 }

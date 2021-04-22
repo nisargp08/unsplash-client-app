@@ -33,12 +33,13 @@
                 v-for="(file, index) in filteredFiles"
                 :key="index"
                 class="mb-4 relative grid-item"
+                @click.stop="openPhoto(file)"
               >
                 <div class="grid-images">
                   <img :src="getFileUrl(file.id)" :alt="file.label" />
                 </div>
                 <div
-                  class="image-overlay absolute inset-0 hidden flex-col p-4 justify-between bg-gray-900 bg-opacity-50"
+                  class="image-overlay cursor-pointer absolute inset-0 hidden flex-col p-4 justify-between bg-gray-900 bg-opacity-50"
                 >
                   <!-- Delete Button -->
                   <div class="self-end">
@@ -47,7 +48,7 @@
                       color="red"
                       title="Delete this photo"
                       size="sm"
-                      @buttonClick="deletePhoto(file.id)"
+                      @click.native.prevent.stop="deletePhoto(file.id)"
                     >
                       <icons-trash :height="4" :width="4"></icons-trash>
                       <span class="ml-1">Delete</span>
@@ -69,6 +70,31 @@
           </no-image-state>
         </template>
       </transition-fade>
+      <transition-fade>
+        <elements-modal v-if="isModalOpen" @closeModal="isModalOpen = false">
+          <div class="flex flex-col items-center justify-center">
+            <img :src="getFileUrl(selectedFile.id)" :alt="selectedFile.alt" />
+          </div>
+          <!-- Close button -->
+          <div class="fixed right-0 top-0 mt-4 mr-8">
+            <elements-button
+              color="red"
+              class="flex items-center"
+              @click.native="isModalOpen = false"
+            >
+              <icons-circle-cancel></icons-circle-cancel>
+              <p class="ml-2">Close</p>
+            </elements-button>
+          </div>
+          <!-- Download button -->
+          <!-- <div class="fixed left-0 top-0 mt-4 ml-4">
+            <elements-button color="green" class="flex items-center">
+              <icons-download></icons-download>
+              <p class="ml-2">Download</p>
+            </elements-button>
+          </div> -->
+        </elements-modal>
+      </transition-fade>
     </template>
   </div>
 </template>
@@ -81,6 +107,8 @@ export default {
     return {
       errorMessage: '',
       isLoading: false,
+      isModalOpen: false,
+      selectedFile: '',
     }
   },
   computed: {
@@ -101,6 +129,12 @@ export default {
   methods: {
     getFileUrl(id) {
       return `${this.$photoApi.apiServerUrl}/${id}`
+    },
+    openPhoto(file) {
+      // Set the selected file to clicked file
+      this.selectedFile = file
+      // Open modal
+      this.isModalOpen = true
     },
     async deletePhoto(id) {
       if (confirm('Are you sure ?')) {
