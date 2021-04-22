@@ -2,6 +2,7 @@
 export default function ({ $axios }, inject) {
   // Variables
   const apiServerUrl = `${process.env.API_SERVER_URL}/fileUpload`
+  const apiGetImageBlob = `${process.env.API_SERVER_URL}/urlFetch`
   // Inject the function you want to use in nuxt components
   inject('photoApi', {
     apiServerUrl,
@@ -11,12 +12,22 @@ export default function ({ $axios }, inject) {
   })
 
   // Functions
+  async function getImageFromUrl(url) {
+    try {
+      const file = await $axios.$get(apiGetImageBlob, {
+        params: { url: url.trim() },
+        responseType: 'blob',
+      })
+      return file
+    } catch (error) {
+      getErrorMessage(error)
+    }
+  }
+
   async function insertPhotoFromUrl(input) {
     try {
       // Fetch the blob file from the url
-      const blobFile = await $axios.$get(input.url, {
-        responseType: 'blob',
-      })
+      const blobFile = await getImageFromUrl(input.url)
       // If received response is a blob
       if (blobFile.type.match('image/*')) {
         // Create a file from the received blob
