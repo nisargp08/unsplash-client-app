@@ -10,7 +10,19 @@
     </template>
     <!-- Show loading state when getting image data -->
     <template v-else-if="isLoading">
-      <icons-loading-spinner :height="8" :width="8"></icons-loading-spinner>
+      <icons-loading-spinner :height="8" :width="8">
+        <p class="text-lg font-semibold text-white mt-2 text-center">Loading</p>
+
+        <!-- Sleeping notice -->
+        <div
+          class="py-2 px-4 text-sm font-medium bg-green-200 text-green-700 rounded-md mt-4"
+        >
+          <p>
+            First initial page load might take 15-30 seconds<br />
+            as heroku servers go to sleep when idle.😴
+          </p>
+        </div>
+      </icons-loading-spinner>
     </template>
     <!--When no photos are present  -->
     <template v-else-if="files.length === 0">
