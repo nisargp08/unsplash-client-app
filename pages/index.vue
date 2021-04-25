@@ -47,29 +47,35 @@
                 class="mb-4 relative grid-item"
                 @click.stop="openPhoto(file)"
               >
-                <picture class="grid-images">
-                  <img :src="getFileUrl(file.id)" :alt="file.label" />
-                </picture>
-                <div
-                  class="image-overlay cursor-pointer absolute inset-0 hidden flex-col p-4 justify-between bg-gray-900 bg-opacity-50"
-                >
-                  <!-- Delete Button -->
-                  <div class="self-end">
-                    <elements-button
-                      class="flex items-center px-3 py-1"
-                      color="red"
-                      title="Delete this photo"
-                      size="sm"
-                      @click.native.prevent.stop="deletePhoto(file.id)"
-                    >
-                      <icons-trash :height="4" :width="4"></icons-trash>
-                      <span class="ml-1">Delete</span>
-                    </elements-button>
-                  </div>
-                  <p class="text-xs sm:text-base font-medium">
-                    {{ file.label }}
-                  </p>
-                </div>
+                <figure class="grid-images">
+                  <progressive-background
+                    :src="getFileUrl(file.id)"
+                    :alt="file.label"
+                  >
+                    <template slot="content">
+                      <div
+                        class="image-overlay cursor-pointer absolute inset-0 hidden flex-col p-4 justify-between bg-gray-900 bg-opacity-50 z-10"
+                      >
+                        <!-- Delete Button -->
+                        <div class="self-end">
+                          <elements-button
+                            class="flex items-center px-3 py-1"
+                            color="red"
+                            title="Delete this photo"
+                            size="sm"
+                            @click.native.prevent.stop="deletePhoto(file.id)"
+                          >
+                            <icons-trash :height="4" :width="4"></icons-trash>
+                            <span class="ml-1">Delete</span>
+                          </elements-button>
+                        </div>
+                        <p class="text-xs sm:text-base font-medium">
+                          {{ file.label }}
+                        </p>
+                      </div>
+                    </template>
+                  </progressive-background>
+                </figure>
               </div>
             </div>
           </div>
@@ -86,7 +92,6 @@
         <elements-modal
           v-if="isModalOpen"
           :opacity="90"
-          position="centered"
           @closeModal="closeModal()"
         >
           <!-- Image backdrop for spacing -->
@@ -95,15 +100,16 @@
           <div class="image-window mx-auto relative">
             <div class="my-12">
               <picture class="flex flex-col items-center justify-center">
-                <img
+                <progressive-img
                   :src="getFileUrl(selectedFile.id)"
                   :alt="selectedFile.label"
+                  :delay="1"
                 />
               </picture>
             </div>
           </div>
           <!-- Close button -->
-          <div class="fixed right-0 top-0 mt-4 mr-8">
+          <div class="fixed right-0 top-0 mt-4 mr-8 z-10">
             <elements-button
               color="white"
               :border="0"
@@ -114,7 +120,7 @@
             </elements-button>
           </div>
           <!-- Download button -->
-          <div class="fixed left-0 top-0 mt-4 ml-4">
+          <div class="fixed left-0 top-0 mt-4 ml-4 z-10">
             <elements-button
               color="green"
               class="flex items-center"
@@ -233,7 +239,9 @@ export default {
     max-width: calc(100vw - 15rem);
   }
 }
-
+.progressive-background-slot {
+  position: static;
+}
 .grid-item:hover .image-overlay {
   display: flex;
 }
