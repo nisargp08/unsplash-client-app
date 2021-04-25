@@ -239,7 +239,7 @@ export default {
     max-width: calc(100vw - 15rem);
   }
 }
-.progressive-background-slot {
+.grid-item .progressive-background-slot {
   position: static;
 }
 .grid-item:hover .image-overlay {
