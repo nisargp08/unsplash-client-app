@@ -12,7 +12,10 @@
         @click="closeModal"
       ></div>
       <!-- Modal content -->
-      <div class="relative w-full overflow-y-auto" :class="getModalSize()">
+      <div
+        class="relative w-full overflow-y-auto"
+        :class="[getModalSize(), getModalPosition()]"
+      >
         <slot></slot>
       </div>
     </div>
@@ -29,6 +32,10 @@ export default {
     opacity: {
       type: Number,
       default: 50,
+    },
+    // eslint-disable-next-line vue/require-default-prop
+    position: {
+      type: String,
     },
   },
   mounted() {
@@ -59,6 +66,12 @@ export default {
           return 'max-w-screen-xl'
         case '2xl':
           return 'max-w-screen-2xl'
+      }
+    },
+    getModalPosition() {
+      switch (this.position) {
+        case 'centered':
+          return 'flex flex-col items-center'
       }
     },
     getModalOpacity() {

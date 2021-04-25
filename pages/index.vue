@@ -86,13 +86,14 @@
         <elements-modal
           v-if="isModalOpen"
           :opacity="90"
+          position="centered"
           @closeModal="closeModal()"
         >
           <!-- Image backdrop for spacing -->
           <div class="fixed inset-0" role="button" @click="closeModal()"></div>
           <!-- Image display -->
-          <div class="max-w-screen-xl w-full mx-auto relative">
-            <div class="mx-4 my-12">
+          <div class="image-window mx-auto relative">
+            <div class="my-12">
               <picture class="flex flex-col items-center justify-center">
                 <img
                   :src="getFileUrl(selectedFile.id)"
@@ -224,6 +225,15 @@ export default {
 </script>
 
 <style>
+.image-window {
+  max-width: calc(100vw - 4rem);
+}
+@media (min-width: 768px) {
+  .image-window {
+    max-width: calc(100vw - 15rem);
+  }
+}
+
 .grid-item:hover .image-overlay {
   display: flex;
 }
