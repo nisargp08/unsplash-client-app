@@ -1,7 +1,7 @@
 <template>
   <button
-    class="border text-white rounded-md font-medium transition focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-2"
-    :class="[colorClasses(), disabledClasess(), sizeClasses()]"
+    class="text-white rounded-md font-medium transition focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-2"
+    :class="[colorClasses(), disabledClasess(), sizeClasses(), borderClasses()]"
     :disabled="disabled"
     @click="buttonClicked"
   >
@@ -23,6 +23,10 @@ export default {
     size: {
       type: String,
       default: 'md',
+    },
+    border: {
+      type: Number,
+      default: 1,
     },
   },
   methods: {
@@ -48,6 +52,11 @@ export default {
         return ['opacity-50 cursor-not-allowed']
       }
     },
+    // Border classes
+    borderClasses() {
+      return [`border-${this.border}`]
+      // border-0 border-1 border-2 border-3
+    },
     // THis function will return the classes based on the size passed as a prop
     sizeClasses() {
       if (this.size === 'sm') {
@@ -63,3 +72,8 @@ export default {
   },
 }
 </script>
+<style>
+.border-1 {
+  border-width: 1px;
+}
+</style>

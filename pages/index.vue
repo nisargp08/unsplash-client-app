@@ -47,9 +47,9 @@
                 class="mb-4 relative grid-item"
                 @click.stop="openPhoto(file)"
               >
-                <div class="grid-images">
+                <picture class="grid-images">
                   <img :src="getFileUrl(file.id)" :alt="file.label" />
-                </div>
+                </picture>
                 <div
                   class="image-overlay cursor-pointer absolute inset-0 hidden flex-col p-4 justify-between bg-gray-900 bg-opacity-50"
                 >
@@ -83,28 +83,49 @@
         </template>
       </transition-fade>
       <transition-fade>
-        <elements-modal v-if="isModalOpen" @closeModal="isModalOpen = false">
-          <div class="flex flex-col items-center justify-center">
-            <img :src="getFileUrl(selectedFile.id)" :alt="selectedFile.alt" />
+        <elements-modal
+          v-if="isModalOpen"
+          :opacity="90"
+          @closeModal="closeModal()"
+        >
+          <!-- Image backdrop for spacing -->
+          <div class="fixed inset-0" role="button" @click="closeModal()"></div>
+          <!-- Image display -->
+          <div class="max-w-screen-xl w-full mx-auto relative">
+            <div class="mx-4 my-12">
+              <picture class="flex flex-col items-center justify-center">
+                <img
+                  :src="getFileUrl(selectedFile.id)"
+                  :alt="selectedFile.label"
+                />
+              </picture>
+            </div>
           </div>
           <!-- Close button -->
           <div class="fixed right-0 top-0 mt-4 mr-8">
             <elements-button
-              color="red"
+              color="white"
+              :border="0"
               class="flex items-center"
-              @click.native="isModalOpen = false"
+              @click.native="closeModal()"
             >
-              <icons-circle-cancel></icons-circle-cancel>
-              <p class="ml-2">Close</p>
+              <icons-cancel :width="8" :height="8"></icons-cancel>
             </elements-button>
           </div>
           <!-- Download button -->
-          <!-- <div class="fixed left-0 top-0 mt-4 ml-4">
-            <elements-button color="green" class="flex items-center">
+          <div class="fixed left-0 top-0 mt-4 ml-4">
+            <elements-button
+              color="green"
+              class="flex items-center"
+              @click.native="downloadPhoto"
+            >
               <icons-download></icons-download>
               <p class="ml-2">Download</p>
             </elements-button>
-          </div> -->
+            <p v-if="downloadError !== ''" class="my-2 text-red-500">
+              {{ downloadError }}
+            </p>
+          </div>
         </elements-modal>
       </transition-fade>
     </template>
@@ -121,6 +142,7 @@ export default {
       isLoading: false,
       isModalOpen: false,
       selectedFile: '',
+      downloadError: '',
     }
   },
   computed: {
@@ -146,7 +168,7 @@ export default {
       // Set the selected file to clicked file
       this.selectedFile = file
       // Open modal
-      this.isModalOpen = true
+      this.openModal()
     },
     async deletePhoto(id) {
       if (confirm('Are you sure ?')) {
@@ -158,6 +180,44 @@ export default {
           this.errorMessage = 'Error deleting photo. Please try again later...'
         }
       }
+    },
+    async downloadPhoto() {
+      // Function to download a photo in browser
+      try {
+        // Get file from server
+        const file = await this.$photoApi.downloadPhoto(
+          this.getFileUrl(this.selectedFile.id)
+        )
+        // Api will return a blob structure back as a response so now we can convert it to an object url
+        const url = URL.createObjectURL(file)
+        // Create an anchor tag to hold our download file option
+        const a = document.createElement('a')
+        // Hide it by default
+        a.setAttribute('hidden', '')
+        // Set href to download url
+        a.setAttribute('href', url)
+        // Set download attribute with filename equal to description
+        a.setAttribute(
+          'download',
+          `${this.selectedFile.label}.${file.type.split('/')[1]}`
+        )
+        // Append to body and Trigger click
+        document.body.appendChild(a)
+        a.click()
+        // Remove element
+        document.body.removeChild(a)
+      } catch (error) {
+        this.downloadError = 'Error downloading file'
+      }
+    },
+    openModal() {
+      this.downloadError = ''
+      this.isModalOpen = true
+    },
+    closeModal() {
+      // Enable main body scroll before closing the modal
+      document.body.style.overflowY = 'auto'
+      this.isModalOpen = false
     },
   },
 }

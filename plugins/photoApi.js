@@ -9,6 +9,7 @@ export default function ({ $axios }, inject) {
     insertPhotoFromUrl,
     getAllPhotos,
     deletePhotoById,
+    downloadPhoto,
   })
 
   // Functions
@@ -64,6 +65,19 @@ export default function ({ $axios }, inject) {
     try {
       const response = await $axios.delete(`${apiServerUrl}/${id}`)
       return response
+    } catch (error) {
+      getErrorMessage(error)
+    }
+  }
+  async function downloadPhoto(url) {
+    try {
+      const blobFile = await getImageFromUrl(url)
+      if (blobFile.type.match('image/*')) {
+        const file = new Blob([blobFile], { type: blobFile.type })
+        return file
+      } else {
+        throw new Error('File cannot be downloaded')
+      }
     } catch (error) {
       getErrorMessage(error)
     }

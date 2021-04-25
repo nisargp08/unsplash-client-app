@@ -6,7 +6,8 @@
     >
       <!-- Modal backdrop -->
       <div
-        class="modal-backdrop absolute inset-0 bg-gray-900 bg-opacity-50"
+        class="modal-backdrop absolute inset-0 bg-gray-900"
+        :class="getModalOpacity()"
         role="button"
         @click="closeModal"
       ></div>
@@ -25,6 +26,10 @@ export default {
       type: String,
       default: '',
     },
+    opacity: {
+      type: Number,
+      default: 50,
+    },
   },
   mounted() {
     // Close modal on escape key
@@ -33,9 +38,13 @@ export default {
         this.closeModal()
       }
     })
+    // Disable main body scroll - To avoid double scrollbar in modal
+    document.body.style.overflowY = 'hidden'
   },
   methods: {
     closeModal() {
+      // Enable main body scroll before closing the modal
+      document.body.style.overflowY = 'auto'
       this.$emit('closeModal')
     },
     getModalSize() {
@@ -51,6 +60,10 @@ export default {
         case '2xl':
           return 'max-w-screen-2xl'
       }
+    },
+    getModalOpacity() {
+      return [`bg-opacity-${this.opacity}`]
+      // bg-opacity-50 bg-opacity-60 bg-opacity-70 bg-opacity-80 bg-opacity-90
     },
   },
 }
