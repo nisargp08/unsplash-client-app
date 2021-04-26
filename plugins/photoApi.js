@@ -6,7 +6,7 @@ export default function ({ $axios }, inject) {
   // Inject the function you want to use in nuxt components
   inject('photoApi', {
     apiServerUrl,
-    insertPhotoFromUrl,
+    insertPhoto,
     getAllPhotos,
     deletePhotoById,
     downloadPhoto,
@@ -25,10 +25,17 @@ export default function ({ $axios }, inject) {
     }
   }
 
-  async function insertPhotoFromUrl(input) {
+  async function insertPhoto(input, opts = { fromUrl: false }) {
     try {
-      // Fetch the blob file from the url
-      const blobFile = await getImageFromUrl(input.url)
+      // Check if incoming file is from URL or a system file(By default accepts from a sytem file)
+      let blobFile = null
+      if (opts.fromUrl) {
+        // Fetch the blob file from the url
+        blobFile = await getImageFromUrl(input.url)
+      } else {
+        // Incoming file is from a system file, Simply set that file to blobFile variable
+        blobFile = input
+      }
       // If received response is a blob
       if (blobFile.type.match('image/*')) {
         // Create a file from the received blob
