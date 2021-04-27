@@ -63,7 +63,7 @@
                   <div
                     v-for="(image, index) in previewFiles"
                     :key="index"
-                    class="flex relative"
+                    class="flex relative items-center justify-center"
                   >
                     <img class="rounded-md object-cover" :src="image" />
                     <!-- Remove overlay -->
