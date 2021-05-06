@@ -10,6 +10,9 @@
   <h3>
     <a href="https://np-unsplash.vercel.app/">
       Demo
+    </a> | 
+    <a href="https://github.com/nisargp08/unsplash-server-app">
+      API Code
     </a>
   </h3>
 </div>
